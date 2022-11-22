@@ -27,7 +27,7 @@
       const res = await fetch(`https://us-central1-skyskolen-bysykkel.cloudfunctions.net/cloud-functions-firestore?stationName=${stationName}`, {
       })
       const json = await res.json()
-      document.getElementById('successMessage').textContent = `Det var ${json.totalNumberOfTrips} antall turer fra ${stationName} i september` 
+      document.getElementById('successMessage').textContent = `Det var ${json.totalNumberOfTrips} turer til/fra ${stationName} i september` 
     }
       catch {
         document.getElementById('successMessage').textContent = ':('
