@@ -1,7 +1,7 @@
-const { Firestore, query } = require('@google-cloud/firestore');
+const { Firestore, query } = require('@google-cloud/firestore')
 // Use your project ID here
-const PROJECTID = 'skyskolen-bysykkel';
-const COLLECTION_NAME = 'sykkelturer';
+const PROJECTID = 'skyskolen-bysykkel'
+const COLLECTION_NAME = 'sykkelturer'
 
 const firestore = new Firestore({
   projectId: PROJECTID,
@@ -10,7 +10,7 @@ const firestore = new Firestore({
   // If you have to, export the following to your shell:
   //   GOOGLE_APPLICATION_CREDENTIALS=<path>
   keyFilename: './service-account.json',
-});
+})
 
 /**
  * Get bike station data
@@ -22,29 +22,27 @@ const firestore = new Firestore({
  * @param {!express:Response} res HTTP response context.
  */
 exports.main = async (req, res) => {
-  const stationName = req.query.stationName;
+  const stationName = req.query.stationName
 
   if (req.method === 'GET') {
     // Create a reference to the collection
-    const tripsRef = firestore.collection(COLLECTION_NAME);
+    const tripsRef = firestore.collection(COLLECTION_NAME)
 
     // Create query against the collection.
-    const startedQuery = tripsRef.where(
-      'start_station_name',
-      '==',
-      stationName
-    );
-    const endedQuery = tripsRef.where('end_station_name', '==', stationName);
+    const startedQuery = tripsRef.where('start_station_name', '==', stationName)
+    const endedQuery = tripsRef.where('end_station_name', '==', stationName)
 
     // Count documents
     // https://firebase.google.com/docs/firestore/query-data/aggregation-queries
-    const snapshotStarted = await startedQuery.count().get();
-    const snapshotEnded = await endedQuery.count().get();
+    const snapshotStarted = await startedQuery.count().get()
+    const snapshotEnded = await endedQuery.count().get()
 
     const totalNumberOfTrips =
-      snapshotEnded.data().count + snapshotStarted.data().count;
+      snapshotEnded.data().count + snapshotStarted.data().count
 
     // TODO: test that data is returned
-    return res.status(200).json({ totalNumberOfTrips });
+    res.set('Access-Control-Allow-Origin', '*')
+
+    return res.status(200).json({ totalNumberOfTrips })
   }
-};
+}

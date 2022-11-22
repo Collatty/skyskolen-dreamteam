@@ -9,7 +9,29 @@
     <div id="message">
       <h2>Velkommen til skyskolens sjukt kule bysykkelapp!</h2>
       <p>Her kan du skrive inn en stasjon og se hvor mange turer som startet eller sluttet på denne stasjonen</p>
-      <input/>
-      <p>Det var x antall turer fra y i september</p>
+      <input oninput="handleInputChange(event)"/>
+      <button onclick="handleSearch()">Søk</button>
+      <p id="successMessage"></p>
   </body>
+  <script>
+    let stationName = '';
+    function handleInputChange(event) {
+      stationName = event.target.value
+    }
+    function handleSearch() {
+      console.log('clicked')
+      fetchData(stationName)
+    }
+    async function fetchData(stationName) {
+      try {
+      const res = await fetch(`https://us-central1-skyskolen-bysykkel.cloudfunctions.net/cloud-functions-firestore?stationName=${stationName}`, {
+      })
+      const json = await res.json()
+      document.getElementById('successMessage').textContent = `Det var ${json.totalNumberOfTrips} antall turer fra ${stationName} i september` 
+    }
+      catch {
+        document.getElementById('successMessage').textContent = ':('
+      }
+    }
+  </script>
 </html>
