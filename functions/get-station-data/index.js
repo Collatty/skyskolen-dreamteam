@@ -22,9 +22,7 @@ const firestore = new Firestore({
  * @param {!express:Response} res HTTP response context.
  */
 exports.main = async (req, res) => {
-  // TODO: use stationName from HTTP request
-
-  const stationName = 'Skøyen' // TEST-VALUE
+  const stationName = req.query.stationName
 
   if (req.method === 'GET') {
     // Create a reference to the collection
@@ -43,6 +41,8 @@ exports.main = async (req, res) => {
       snapshotEnded.data().count + snapshotStarted.data().count
 
     // TODO: test that data is returned
+    res.set('Access-Control-Allow-Origin', '*')
+
     return res.status(200).json({ totalNumberOfTrips })
   }
 }
